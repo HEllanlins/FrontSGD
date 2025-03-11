@@ -1,5 +1,5 @@
-import Nav from "../../components/nav";
-import Table from "../../components/Table";
+import Nav from "../components/Navbar";
+import Table from "../components/Table";
 
 export default function Chamados() {
   //<> é o sinal chamado fragmento, serve para criar um suposto elemento pai sem nada dentro para não ocupar nenhum espaço
