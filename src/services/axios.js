@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3000", // Ajuste conforme necessário
-  timeout: 10000, // 10 segundos
+  baseURL: "https://sgd-api-6983.onrender.com", // Ajuste conforme necessário
+  timeout: 5000, // 10 segundos
   headers: {
     "Content-Type": "application/json",
   },
