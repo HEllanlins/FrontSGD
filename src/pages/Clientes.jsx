@@ -1,13 +1,11 @@
-import Table from "../components/Table";
-import api from "../services/axios";
+import Nav from "../components/Navbar";
 
 export default function Clientes() {
-  const data = api.get("/clientes");
 
   return (
     <>
+      <Nav />
       <h1>Clientes</h1>
-      <Table headers={["Nome", "Tel", "Email"]} data={data} />
     </>
   );
 }

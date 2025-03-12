@@ -1,10 +1,11 @@
 import Nav from "../components/Navbar";
 
-export default function Financeiro() {
+export default function Funcionarios() {
+
   return (
     <>
       <Nav />
-      <h1>Financeiro</h1>
+      <h1>Funcionarios</h1>
     </>
   );
 }
