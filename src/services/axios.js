@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://sgd-api-6983.onrender.com", // Ajuste conforme necessário
+  baseURL: "https://sgdapi-production.up.railway.app", // Ajuste conforme necessário
   timeout: 5000, // 10 segundos
   headers: {
     "Content-Type": "application/json",

@@ -1,6 +1,7 @@
 import Nav from "../components/Navbar";
 
 export default function Estoque() {
+
   return (
     <>
       <Nav />
