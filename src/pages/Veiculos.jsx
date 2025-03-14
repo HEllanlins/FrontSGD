@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import api from "../services/axios";
 import Nav from "../components/Navbar";
 import api from "../services/axios";
 import Table from "../components/Table";
