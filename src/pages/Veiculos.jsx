@@ -1,7 +1,26 @@
+import { useEffect, useState } from "react";
 import api from "../services/axios";
 import Nav from "../components/Navbar";
+import api from "../services/axios";
+import Table from "../components/Table";
 
 export default function Veiculos() {
+  const [data, setData] = useState([]);
+
+  const headers = [
+    { label: "Ano", key: "ano" },
+    { label: "Marca", key: "marca" },
+    { label: "Modelo", key: "modelo" },
+    { label: "Placa", key: "placa" },
+  ];
+
+  useEffect(() => {
+    async function getData() {
+      const resposta = await api.get("/veiculo");
+      setData(resposta.data);
+    }
+    getData();
+  }, []);
   
   async function getveiculos(){
     const data = await api.get("/veiculo")
@@ -11,7 +30,12 @@ export default function Veiculos() {
   return (
     <>
       <Nav />
-      <h1>Veiculos</h1>
+
+      <div className="h-full w-full">
+        <div className="px-10 py-5">
+          <Table headers={headers} data={data} />
+        </div>
+      </div>
     </>
   );
 }
