@@ -20,12 +20,7 @@ export default function Veiculos() {
     }
     getData();
   }, []);
-  
-  async function getveiculos(){
-    const data = await api.get("/veiculo")
-     console.log(data)
-  }
-  getveiculos()
+
   return (
     <>
       <Nav />
