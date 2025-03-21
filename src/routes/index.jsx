@@ -8,6 +8,7 @@ import Estoque from "../pages/Estoque";
 import Financeiro from "../pages/Financeiro";
 import Veiculos from "../pages/Veiculos";
 import Funcionarios from "../pages/Funcionarios";
+import Login from "../pages/Login";
 
 export default function AppRoutes() {
   return (
@@ -19,6 +20,7 @@ export default function AppRoutes() {
       <Route path="/financeiro" element={<Financeiro />} />
       <Route path="/veiculos" element={<Veiculos />} />
       <Route path="/funcionarios" element={<Funcionarios />} />
+      <Route path="/login" element={<Login />} />
     </Routes>
   );
 }
