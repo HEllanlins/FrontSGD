@@ -8,6 +8,7 @@ export default function Home() {
         <div className="h-1/2 w-full grid grid-cols-2 gap-4 p-4">
           <div className="bg-red-500">
             <h1>Grafico finanças</h1>
+            
           </div>
           <div className="bg-green-500">
             <h1>Grafico Serviços</h1>
