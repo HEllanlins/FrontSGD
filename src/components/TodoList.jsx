@@ -55,7 +55,7 @@ export default function TodoList() {
           <li key={task.id} className="flex justify-between items-center bg-gray-100 p-2 rounded">
             <div>
               <p className="font-semibold">{task.name}</p>
-              <p className="text-sm text-gray-500">{task.date}</p>
+              <p className="text-sm text-gray-500">{new Date(task.date).toLocaleDateString("pt-BR")}</p>
             </div>
             <button onClick={() => removeTask(task.id)} className="text-red-500 hover:text-red-700 cursor-pointer">
               <Trash2 size={18} />
