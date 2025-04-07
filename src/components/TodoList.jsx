@@ -57,7 +57,7 @@ export default function TodoList() {
               <p className="font-semibold">{task.name}</p>
               <p className="text-sm text-gray-500">{task.date}</p>
             </div>
-            <button onClick={() => removeTask(task.id)} className="text-red-500 hover:text-red-700">
+            <button onClick={() => removeTask(task.id)} className="text-red-500 hover:text-red-700 cursor-pointer">
               <Trash2 size={18} />
             </button>
           </li>
