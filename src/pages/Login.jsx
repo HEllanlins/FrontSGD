@@ -5,8 +5,7 @@ export default function Login() {
         <div className="bg-blue-600 w-1/3 flex flex-col justify-center p-5 rounded-l-lg text-white">
           <h1 className="text-4xl text-center font-bold">SGD</h1>
           <p className="mt-10 text-center text-sm">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima voluptatem necessitatibus eum voluptas nemo
-            placeat iure accusantium, architecto inventore facere harum earum quo natus.
+            "Bem-vindo de volta! Conecte-se e continue transformando ideias em resultados."
           </p>
         </div>
         <div className="w-2/3 flex flex-col justify-center p-10 rounded-r-lg">
