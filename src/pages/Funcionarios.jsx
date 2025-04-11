@@ -5,8 +5,8 @@ export default function Funcionarios() {
   api;
   return (
     <>
-      <Nav />
-      <h1>Funcionarios</h1>
+      <Nav/>
+      <h1>Funcionário</h1>
     </>
   );
 }
