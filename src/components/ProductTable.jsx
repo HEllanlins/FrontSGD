@@ -1,78 +1,49 @@
-import StatusBadge from './StatusBadge';
-import ProductActions from './ProductActions';
+import React from "react";
+import StatusBadge from "./StatusBadge";
+import ProductActions from "./ProductActions";
 
-const produtos = [
-  {
-    nome: 'Notebook Dell Inspiron',
-    categoria: 'Eletrônicos',
-    quantidade: 15,
-    preco: 'R$ 3.500,00',
-    status: 'Disponível',
-    data: '14/10/2023',
-  },
-  {
-    nome: 'Monitor LG 24 polegadas',
-    categoria: 'Eletrônicos',
-    quantidade: 8,
-    preco: 'R$ 950,00',
-    status: 'Disponível',
-    data: '11/10/2023',
-  },
-  {
-    nome: 'Teclado Mecânico Redragon',
-    categoria: 'Periféricos',
-    quantidade: 3,
-    preco: 'R$ 250,00',
-    status: 'Baixo',
-    data: '09/10/2023',
-  },
-  {
-    nome: 'Mouse Logitech G502',
-    categoria: 'Periféricos',
-    quantidade: 0,
-    preco: 'R$ 320,00',
-    status: 'Esgotado',
-    data: '04/10/2023',
-  },
-  {
-    nome: 'Cadeira Gamer ThunderX3',
-    categoria: 'Móveis',
-    quantidade: 5,
-    preco: 'R$ 1.200,00',
-    status: 'Disponível',
-    data: '07/10/2023',
-  },
-];
-
-const ProductTable = () => {
+const ProductTable = ({ produtos, onEdit, onDelete }) => {
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white border border-gray-200 rounded">
-        <thead className="bg-blue-100 text-blue-800">
-          <tr>
-            <th className="text-left px-4 py-2">Produto</th>
-            <th className="text-left px-4 py-2">Categoria</th>
-            <th className="text-left px-4 py-2">Quantidade</th>
-            <th className="text-left px-4 py-2">Preço Unit.</th>
-            <th className="text-left px-4 py-2">Status</th>
-            <th className="text-left px-4 py-2">Última Atualização</th>
-            <th className="text-left px-4 py-2">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {produtos.map((p, idx) => (
-            <tr key={idx} className="border-t">
-              <td className="px-4 py-2">{p.nome}</td>
-              <td className="px-4 py-2">{p.categoria}</td>
-              <td className="px-4 py-2">{p.quantidade}</td>
-              <td className="px-4 py-2">{p.preco}</td>
-              <td className="px-4 py-2"><StatusBadge status={p.status} /></td>
-              <td className="px-4 py-2">{p.data}</td>
-              <td className="px-4 py-2"><ProductActions /></td>
+    <div className="bg-gray-100 p-6 rounded-xl">
+      <h2 className="text-xl font-semibold text-blue-800 mb-4">Produtos em Estoque</h2>
+      <div className="overflow-x-auto rounded-lg shadow-md">
+        <table className="min-w-full text-sm text-center border border-blue-500">
+          <thead className="bg-blue-600 text-white">
+            <tr>
+              <th className="px-4 py-3">Produto</th>
+              <th className="px-4 py-3">Categoria</th>
+              <th className="px-4 py-3">Quantidade</th>
+              <th className="px-4 py-3">Preço Unit.</th>
+              <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3">Última Atualização</th>
+              <th className="px-4 py-3">Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="bg-white">
+            {produtos.map((produto, idx) => (
+              <tr
+                key={idx}
+                className="border-t border-blue-200 hover:bg-blue-50 transition duration-200"
+              >
+                <td className="px-4 py-3">{produto.nome}</td>
+                <td className="px-4 py-3">{produto.categoria}</td>
+                <td className="px-4 py-3">{produto.quantidade}</td>
+                <td className="px-4 py-3">{produto.preco}</td>
+                <td className="px-4 py-3">
+                  <StatusBadge status={produto.status} />
+                </td>
+                <td className="px-4 py-3">{produto.data}</td>
+                <td className="px-4 py-3">
+                  <ProductActions
+                    onEdit={() => onEdit(produto)}
+                    onDelete={() => onDelete(produto)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
