@@ -99,7 +99,7 @@ const Estoque = () => {
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
               onClick={handleAdd}
             >
-              + Adicionar Produto
+              ➕ Adicionar Produto
             </button>
           </div>
         </div>

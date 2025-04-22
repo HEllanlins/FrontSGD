@@ -1,39 +1,62 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Nav from "../components/Navbar";
-import Table from "../components/Table";
+import ClienteTable from "../components/ClienteTable";
 import api from "../services/axios";
 
-export default function Clientes() {
-  //<> é o sinal chamado fragmento, serve para criar um suposto elemento pai sem nada dentro para não ocupar nenhum espaço
+const Clientes = () => {
+  const [clientes, setClientes] = useState([
+    { nome: "João Silva", email: "joao@exemplo.com", telefone: "(11) 98765-4321", empresa: "Empresa A" },
+    { nome: "Maria Oliveira", email: "maria@exemplo.com", telefone: "(21) 91234-5678", empresa: "Empresa B" },
+    { nome: "Carlos Santos", email: "carlos@exemplo.com", telefone: "(31) 99876-5432", empresa: "Empresa C" },
+  ]);
 
-  //Trocar data pela requisição pra API(ler docs do axios), e colocar em cada pagina que for usar a tabela seus respectivos headers no caso headers do chamados ja está correto
-
-  const [data, setData] = useState([]);
-
-  const headers = [
-    { label: "CPF", key: "cpf_cnpj" },
-    { label: "Nome", key: "nome" },
-    { label: "Telefone", key: "telefone" },
-    { label: "Endereço", key: "endereco" },
-    { label: "Email", key: "email" },
-  ];
-
-  useEffect(() => {
-    async function getData() {
-      const resposta = await api.get("/cliente");
-      setData(resposta.data);
+  const handleAdd = () => {
+    const nome = prompt("Nome:");
+    const email = prompt("Email:");
+    const telefone = prompt("Telefone:");
+    const empresa = prompt("Empresa:");
+    if (nome && email && telefone && empresa) {
+      setClientes([...clientes, { nome, email, telefone, empresa }]);
     }
-    console.log(getData());
-  }, []);
+  };
+
+  const handleEdit = (cliente) => {
+    const nome = prompt("Novo nome:", cliente.nome);
+    const email = prompt("Novo email:", cliente.email);
+    const telefone = prompt("Novo telefone:", cliente.telefone);
+    const empresa = prompt("Nova empresa:", cliente.empresa);
+    if (nome && email && telefone && empresa) {
+      const atualizados = clientes.map((c) =>
+        c === cliente ? { nome, email, telefone, empresa } : c
+      );
+      setClientes(atualizados);
+    }
+  };
+
+  const handleDelete = (cliente) => {
+    const confirm = window.confirm(`Deseja excluir ${cliente.nome}?`);
+    if (confirm) {
+      setClientes(clientes.filter((c) => c !== cliente));
+    }
+  };
+
   return (
     <>
       <Nav />
-      <div className="p-5 mx-10 my-5 rounded-2xl bg-gray-300">
-        <div className="mb-10 bg-gray-200 rounded-2xl p-10">
-          <h2 className="text-3xl">Clientes</h2>
+      <div className="p-6 bg-white min-h-screen">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-bold">Gerenciamento de Clientes</h1>
+          <button
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-gray-800"
+            onClick={handleAdd}
+          >
+            ➕ Adicionar Cliente
+          </button>
         </div>
-        <Table headers={headers} data={data} />
+        <ClienteTable clientes={clientes} onEdit={handleEdit} onDelete={handleDelete} />
       </div>
-    </>
+      </>
   );
-}
+};
+
+export default Clientes;
