@@ -71,7 +71,7 @@ function Navbar() {
           onClick={() => setUserDropdown(!userDropdown)}
           className="flex items-center gap-2 bg-blue-700 px-4 py-2 rounded hover:bg-blue-800">
           <UserIcon className="w-5 h-5" />
-          <span>User</span>
+          <span>Usuario</span>
         </button>
         {userDropdown && (
           <div className="absolute right-0 mt-2 w-44 bg-white text-black rounded shadow-md">

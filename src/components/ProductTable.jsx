@@ -1,4 +1,3 @@
-import React from "react";
 import StatusBadge from "./StatusBadge";
 import ProductActions from "./ProductActions";
 
@@ -21,10 +20,7 @@ const ProductTable = ({ produtos, onEdit, onDelete }) => {
           </thead>
           <tbody className="bg-white">
             {produtos.map((produto, idx) => (
-              <tr
-                key={idx}
-                className="border-t border-blue-200 hover:bg-blue-50 transition duration-200"
-              >
+              <tr key={idx} className="border-t border-blue-200 hover:bg-blue-50 transition duration-200">
                 <td className="px-4 py-3">{produto.nome}</td>
                 <td className="px-4 py-3">{produto.categoria}</td>
                 <td className="px-4 py-3">{produto.quantidade}</td>
@@ -34,10 +30,7 @@ const ProductTable = ({ produtos, onEdit, onDelete }) => {
                 </td>
                 <td className="px-4 py-3">{produto.data}</td>
                 <td className="px-4 py-3">
-                  <ProductActions
-                    onEdit={() => onEdit(produto)}
-                    onDelete={() => onDelete(produto)}
-                  />
+                  <ProductActions onEdit={() => onEdit(produto)} onDelete={() => onDelete(produto)} />
                 </td>
               </tr>
             ))}

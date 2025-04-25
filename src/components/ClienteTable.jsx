@@ -1,5 +1,3 @@
-import React from "react";
-
 const ClienteTable = ({ clientes, onEdit, onDelete }) => {
   return (
     <div className="overflow-x-auto rounded-lg shadow-md mt-4">
@@ -21,16 +19,10 @@ const ClienteTable = ({ clientes, onEdit, onDelete }) => {
               <td className="px-4 py-2">{cliente.telefone}</td>
               <td className="px-4 py-2">{cliente.empresa}</td>
               <td className="px-4 py-2 flex justify-center gap-2">
-                <button
-                  className="text-blue-600 hover:text-blue-800"
-                  onClick={() => onEdit(cliente)}
-                >
+                <button className="text-blue-600 hover:text-blue-800" onClick={() => onEdit(cliente)}>
                   ✏️
                 </button>
-                <button
-                  className="text-red-600 hover:text-red-800"
-                  onClick={() => onDelete(cliente)}
-                >
+                <button className="text-red-600 hover:text-red-800" onClick={() => onDelete(cliente)}>
                   🗑️
                 </button>
               </td>

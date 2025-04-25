@@ -1,16 +1,13 @@
 // src/components/ChartBar.jsx
-import React from 'react';
-import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer,
-} from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 const data = [
-  { name: 'Jan', Concluídos: 65, 'Em Aberto': 30 },
-  { name: 'Fev', Concluídos: 60, 'Em Aberto': 32 },
-  { name: 'Mar', Concluídos: 80, 'Em Aberto': 25 },
-  { name: 'Abr', Concluídos: 78, 'Em Aberto': 30 },
-  { name: 'Mai', Concluídos: 58, 'Em Aberto': 45 },
-  { name: 'Jun', Concluídos: 57, 'Em Aberto': 35 },
+  { name: "Jan", Concluídos: 65, "Em Aberto": 30 },
+  { name: "Fev", Concluídos: 60, "Em Aberto": 32 },
+  { name: "Mar", Concluídos: 80, "Em Aberto": 25 },
+  { name: "Abr", Concluídos: 78, "Em Aberto": 30 },
+  { name: "Mai", Concluídos: 58, "Em Aberto": 45 },
+  { name: "Jun", Concluídos: 57, "Em Aberto": 35 },
 ];
 
 const ChartBar = () => {

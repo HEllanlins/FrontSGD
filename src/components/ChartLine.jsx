@@ -1,16 +1,13 @@
 // src/components/ChartLine.jsx
-import React from 'react';
-import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend,
-} from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 const data = [
-  { name: 'Jan', Receita: 15000, Despesas: 9000 },
-  { name: 'Fev', Receita: 16000, Despesas: 10000 },
-  { name: 'Mar', Receita: 14000, Despesas: 8700 },
-  { name: 'Abr', Receita: 19000, Despesas: 11000 },
-  { name: 'Mai', Receita: 17000, Despesas: 9500 },
-  { name: 'Jun', Receita: 16000, Despesas: 9100 },
+  { name: "Jan", Receita: 15000, Despesas: 9000 },
+  { name: "Fev", Receita: 16000, Despesas: 10000 },
+  { name: "Mar", Receita: 14000, Despesas: 8700 },
+  { name: "Abr", Receita: 19000, Despesas: 11000 },
+  { name: "Mai", Receita: 17000, Despesas: 9500 },
+  { name: "Jun", Receita: 16000, Despesas: 9100 },
 ];
 
 const ChartLine = () => {
