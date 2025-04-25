@@ -1,53 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import useProdutoStore from "../stores/useProdutoStore";
 import Nav from "../components/Navbar";
 import SearchBar from "../components/SearchBar";
-import FilterDropdown from "../components/FilterDropdown";
-import ProductTable from "../components/ProductTable";
+import Table from "../components/Table";
+import StatusBadge from "../components/StatusBadge";
+import api from "../services/axios";
 import ProductModal from "../components/ProductModal";
+import { toast } from "react-toastify";
 
 const Estoque = () => {
-  const [produtos, setProdutos] = useState([
-    {
-      nome: "Inseticida Aerossol",
-      categoria: "Químicos",
-      quantidade: 20,
-      preco: "R$ 15,00",
-      status: "Disponível",
-      data: "21/04/2025",
-    },
-    {
-      nome: "Gel Mata Baratas",
-      categoria: "Químicos",
-      quantidade: 10,
-      preco: "R$ 25,00",
-      status: "Baixo",
-      data: "20/04/2025",
-    },
-    {
-      nome: "Raticida Granulado",
-      categoria: "Químicos",
-      quantidade: 5,
-      preco: "R$ 35,00",
-      status: "Baixo",
-      data: "19/04/2025",
-    },
-    {
-      nome: "Equipamento de Pulverização",
-      categoria: "Equipamentos",
-      quantidade: 3,
-      preco: "R$ 1.200,00",
-      status: "Disponível",
-      data: "18/04/2025",
-    },
-    {
-      nome: "Máscara de Proteção",
-      categoria: "EPIs",
-      quantidade: 0,
-      preco: "R$ 18,00",
-      status: "Esgotado",
-      data: "17/04/2025",
-    },
-  ]);
+  const produtos = useProdutoStore((state) => state.produtos);
+  const setProdutos = useProdutoStore((state) => state.setProdutos);
+  const addProduto = useProdutoStore((state) => state.addProduto);
+  const updateProduto = useProdutoStore((state) => state.updateProduto);
+  const removeProduto = useProdutoStore((state) => state.removeProduto);
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
@@ -57,27 +23,70 @@ const Estoque = () => {
     setModalOpen(true);
   };
 
-  const handleDelete = (produto) => {
-    const confirm = window.confirm(`Deseja excluir ${produto.nome}?`);
-    if (confirm) {
-      const atualizados = produtos.filter((p) => p !== produto);
-      setProdutos(atualizados);
+  useEffect(() => {
+    async function fetchProdutos() {
+      try {
+        const response = await api.get("/produto");
+        const produtosComId = response.data.map((p) => ({
+          ...p,
+          id: p.id_produto,
+          quantidade: p.qtd_estoque,
+        }));
+        setProdutos(produtosComId);
+      } catch (err) {
+        toast.error("Erro ao carregar os produtos");
+        console.error(err);
+        setProdutos([]);
+      }
+    }
+    fetchProdutos();
+  }, [setProdutos]);
+
+  const handleDelete = async (produto) => {
+    if (window.confirm(`Deseja excluir ${produto.nome}?`)) {
+      try {
+        await api.delete(`/produto/${produto.id}`);
+        removeProduto(produto.id);
+        toast.success("Produto excluído com sucesso");
+      } catch (error) {
+        toast.error("Erro ao excluir o produto");
+        console.error(error);
+      }
     }
   };
 
   const handleAdd = () => {
-    setProdutoSelecionado(null); // Modal virá limpo
+    setProdutoSelecionado(null);
     setModalOpen(true);
   };
 
-  const handleSave = (produtoEditado) => {
-    if (produtoSelecionado) {
+  const handleSave = async (produtoEditado) => {
+    if (produtoSelecionado && produtoEditado.id) {
       // Edição
-      const atualizados = produtos.map((p) => (p === produtoSelecionado ? produtoEditado : p));
-      setProdutos(atualizados);
+      try {
+        await api.put(`/produto/${produtoEditado.id}`, produtoEditado);
+        updateProduto(produtoEditado.id, {
+          ...produtoEditado,
+          quantidade: produtoEditado.qtd_estoque,
+        });
+      } catch (error) {
+        toast.error("Erro ao editar o produto");
+        console.error(error);
+      }
     } else {
       // Novo produto
-      setProdutos([...produtos, produtoEditado]);
+      try {
+        console.log(produtoEditado);
+        const response = await api.post("/produto", produtoEditado);
+        addProduto({
+          ...produtoEditado,
+          id: response.data.id,
+          quantidade: produtoEditado.qtd_estoque,
+        });
+      } catch (error) {
+        toast.error("Erro ao adicionar produto");
+        console.error(error);
+      }
     }
   };
 
@@ -85,18 +94,38 @@ const Estoque = () => {
     <>
       <Nav />
       <div className="p-6 bg-white min-h-screen">
-        <h1 className="text-2xl font-bold text-blue-800 mb-6">Gerenciamento de Estoque</h1>
+        <h1 className="text-2xl font-bold text-blue-800 mb-6">
+          Gerenciamento de Estoque
+        </h1>
         <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
           <SearchBar />
           <div className="flex gap-2">
-            <FilterDropdown label="Categorias" />
-            <FilterDropdown label="Status" />
-            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onClick={handleAdd}>
+            <button
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              onClick={handleAdd}
+            >
               ➕ Adicionar Produto
             </button>
           </div>
         </div>
-        <ProductTable produtos={produtos} onEdit={handleEdit} onDelete={handleDelete} />
+        <Table
+          title="Produtos em Estoque"
+          headers={[
+            { label: "Produto", key: "nome" },
+            { label: "Categoria", key: "categoria" },
+            { label: "Quantidade", key: "quantidade" },
+            { label: "Preço Unit.", key: "preco" },
+            {
+              label: "Status",
+              key: "status",
+              render: (row) => <StatusBadge status={row.status} />,
+            },
+            { label: "Última Atualização", key: "ultima_atualizacao" },
+          ]}
+          data={produtos}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       </div>
 
       {/* Modal de edição/adição */}

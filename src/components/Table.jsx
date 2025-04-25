@@ -1,70 +1,89 @@
 import PropTypes from "prop-types";
 
-function DynamicTable({ headers, data }) {
-  return (
-    <table className="w-full border-collapse border border-gray-300">
-      <thead>
-        <tr className="bg-blue-500">
-          {headers.map(({ label }) => (
-            <th key={label} className="border p-2 text-center">
-              {label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((row, rowIndex) => (
-          <tr key={rowIndex} className="odd:bg-white even:bg-gray-100">
-            {headers.map(({ key }) => (
-              <td key={key} className="border p-2 text-center">
-                {row[key] ?? "-"}
-              </td>
+/**
+ * @param {Array<{label: string, key: string, render?: (row: any) => React.ReactNode}>} headers
+ * @param {Array<Object>} data
+ * @param {(row: Object) => void} onEdit
+ * @param {(row: Object) => void} onDelete
+ * @param {string} [title] - Optional table title
+ */
+const Table = ({ headers, data, onEdit, onDelete, title }) => (
+  <div className="bg-gray-100 p-6 rounded-xl">
+    {title && (
+      <h2 className="text-xl font-semibold text-blue-800 mb-4">{title}</h2>
+    )}
+    <div className="overflow-x-auto rounded-lg shadow-md">
+      <table className="min-w-full text-sm text-center border border-blue-500 rounded-lg overflow-hidden">
+        <thead className="bg-blue-600 text-white">
+          <tr>
+            {headers.map((header) => (
+              <th key={header.key} className="px-4 py-3">
+                {header.label}
+              </th>
             ))}
+            <th className="px-4 py-3">Ações</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-}
+        </thead>
+        <tbody className="bg-white">
+          {data && data.length > 0 ? (
+            data.map((row, idx) => (
+              <tr
+                key={row.id || idx}
+                className="border-t border-blue-200 hover:bg-blue-50 transition duration-200"
+              >
+                {headers.map((header) => (
+                  <td key={header.key} className="px-4 py-3">
+                    {header.render ? header.render(row) : row[header.key]}
+                  </td>
+                ))}
+                <td className="px-4 py-3">
+                  <div className="flex justify-center gap-2">
+                    <button
+                      onClick={() => onEdit(row)}
+                      className="text-blue-600 hover:text-blue-800 transition cursor-pointer"
+                      title="Editar"
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      onClick={() => onDelete(row)}
+                      className="text-red-600 hover:text-red-800 transition cursor-pointer"
+                      title="Excluir"
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td
+                colSpan={headers.length + 1}
+                className="px-4 py-3 text-center text-gray-500"
+              >
+                Nenhum dado encontrado.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  </div>
+);
 
-/*Exemplo de uso
-
-  // Passar todos os campos da tabela
-  const headers = ["Cliente", "Categoria", "Observação", "Metragem", "Valor", "Status"];
-
-  // Passar o data com as mesmas chaves que estão no header
-  const data = [
-    {
-      Cliente: "Arthur",
-      Categoria: "Dedetização",
-      Observação: "Chegar cedo",
-      Metragem: 80,
-      Valor: 500,
-      Status: "Pendente",
-    },
-    {
-      Cliente: "Arthur",
-      Categoria: "Dedetização",
-      Observação: "Chegar cedo",
-      Metragem: 80,
-      Valor: 500,
-      Status: "Pendente",
-    },
-  ];
-
-  Chamada do componente
-  <Table headers={headers} data={data} />
-*/
-
-// Definição do tipos das propriedades do componente (Frescura do react)
-DynamicTable.propTypes = {
+Table.propTypes = {
   headers: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string.isRequired,
       key: PropTypes.string.isRequired,
+      render: PropTypes.func,
     })
   ).isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  title: PropTypes.string,
 };
 
-export default DynamicTable;
+export default Table;

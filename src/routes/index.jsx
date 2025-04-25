@@ -9,6 +9,7 @@ import Financeiro from "../pages/Financeiro";
 import Veiculos from "../pages/Veiculos";
 import Funcionarios from "../pages/Funcionarios";
 import Login from "../pages/Login";
+import Register from "../pages/Register";
 
 export default function AppRoutes() {
   return (
@@ -21,6 +22,7 @@ export default function AppRoutes() {
       <Route path="/veiculos" element={<Veiculos />} />
       <Route path="/funcionarios" element={<Funcionarios />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
     </Routes>
   );
 }
