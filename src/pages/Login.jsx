@@ -1,4 +1,29 @@
+import { toast } from "react-toastify";
+import { useState } from "react";
+import { useUsuarioStore } from "../stores/useUsuarioStore";
+import { useNavigate } from "react-router-dom";
+
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const login = useUsuarioStore((state) => state.login);
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const usuario = await login(email, senha);
+      console.log(usuario);
+      if (usuario && usuario.id) {
+        toast.success("Login realizado com sucesso!");
+        navigate("/");
+      }
+    } catch (e) {
+      console.log(e);
+      toast.error("Erro ao fazer login");
+    }
+  };
+
   return (
     <div className="bg-blue-200 flex justify-center items-center min-h-screen p-20">
       <div className="w-full max-w-4xl bg-gray-200 mx-10 flex rounded-lg shadow-lg">
@@ -11,12 +36,19 @@ export default function Login() {
         </div>
         <div className="w-2/3 flex flex-col justify-center p-10 rounded-r-lg">
           <h1 className="text-3xl text-center font-black">Login</h1>
-          <form className="flex flex-col items-center w-full mt-6 space-y-5">
+          <form
+            className="flex flex-col items-center w-full mt-6 space-y-5"
+            onSubmit={handleLogin}
+          >
             <div className="w-2/3 flex flex-col gap-2">
               <label className="font-medium">Email</label>
               <input
                 className="border-gray-400 border-2 py-2 px-3 rounded-sm w-full"
                 type="text"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
             <div className="w-2/3 flex flex-col gap-2">
@@ -24,6 +56,10 @@ export default function Login() {
               <input
                 className="border-gray-400 border-2 py-2 px-3 rounded-sm w-full"
                 type="password"
+                placeholder="Senha"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                required
               />
             </div>
             <button className="w-2/3 bg-blue-600 cursor-pointer text-white py-2 rounded-md hover:bg-blue-700 transition">

@@ -57,7 +57,6 @@ export default function Veiculos() {
     }
     setModalOpen(false);
   };
-
   const handleDelete = async (veiculo) => {
     if (
       window.confirm(
