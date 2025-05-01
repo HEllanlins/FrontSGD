@@ -13,13 +13,12 @@ export default function Login() {
     e.preventDefault();
     try {
       const usuario = await login(email, senha);
-      console.log(usuario);
       if (usuario && usuario.id) {
         toast.success("Login realizado com sucesso!");
         navigate("/");
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
       toast.error("Erro ao fazer login");
     }
   };

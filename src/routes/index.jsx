@@ -10,19 +10,69 @@ import Veiculos from "../pages/Veiculos";
 import Funcionarios from "../pages/Funcionarios";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import { PrivateRoute } from "./PrivateRoute";
 
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/chamados" element={<Chamados />} />
-      <Route path="/clientes" element={<Clientes />} />
-      <Route path="/estoque" element={<Estoque />} />
-      <Route path="/financeiro" element={<Financeiro />} />
-      <Route path="/veiculos" element={<Veiculos />} />
-      <Route path="/funcionarios" element={<Funcionarios />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route
+        path="/"
+        element={
+          <PrivateRoute>
+            <Home />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/chamados"
+        element={
+          <PrivateRoute>
+            <Chamados />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/clientes"
+        element={
+          <PrivateRoute>
+            <Clientes />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/estoque"
+        element={
+          <PrivateRoute>
+            <Estoque />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/financeiro"
+        element={
+          <PrivateRoute>
+            <Financeiro />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/veiculos"
+        element={
+          <PrivateRoute>
+            <Veiculos />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/funcionarios"
+        element={
+          <PrivateRoute>
+            <Funcionarios />
+          </PrivateRoute>
+        }
+      />
     </Routes>
   );
 }
