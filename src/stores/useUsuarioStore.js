@@ -26,16 +26,17 @@ export const useUsuarioStore = create((set, get) => ({
           nome: payload.userName,
           cargo: payload.userRole,
           email: email,
-          senha: "",
+          senha: senha,
           isLogged: true,
         },
       });
-      console.log(get().usuario);
       return {
         id: payload.userId,
         nome: payload.userName,
         cargo: payload.userRole,
         email: email,
+        senha: senha,
+        isLogged: true,
       };
     } catch (error) {
       localStorage.setItem("isLogged", "false");
@@ -80,6 +81,7 @@ export const useUsuarioStore = create((set, get) => ({
         cargo: "",
         email: "",
         senha: "",
+        isLogged: false,
       },
     });
   },

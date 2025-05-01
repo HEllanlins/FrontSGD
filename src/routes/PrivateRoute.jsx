@@ -2,9 +2,10 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
+import { useUsuarioStore } from "../stores/useUsuarioStore";
 
 export function PrivateRoute({ children }) {
-  const isLogged = localStorage.getItem("isLogged");
+  const { isLogged } = useUsuarioStore((state) => state.usuario);
   const location = useLocation();
 
   useEffect(() => {
