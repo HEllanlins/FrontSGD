@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { UserIcon, Home, Settings, Users, Wrench, Warehouse, DollarSign, ChevronDown } from "lucide-react";
+import { useUsuarioStore } from "../stores/useUsuarioStore";
 
 function Navbar() {
   const [userDropdown, setUserDropdown] = useState(false);
   const [operacionalDropdown, setOperacionalDropdown] = useState(false);
+  const logout = useUsuarioStore((state) => state.logout);
   const userRef = useRef(null);
   const opRef = useRef(null);
 
@@ -23,6 +25,10 @@ function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleLogout = () => {
+    logout();
+    window.location.href = "/login";
+  };
   return (
     <nav className="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
       <div>
@@ -78,7 +84,7 @@ function Navbar() {
             <a href="#" className="block px-4 py-2 hover:bg-gray-100">
               Configurações
             </a>
-            <a href="/login" className="block px-4 py-2 hover:bg-gray-100">
+            <a onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-100">
               Logout
             </a>
           </div>

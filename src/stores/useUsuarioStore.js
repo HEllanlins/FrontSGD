@@ -3,14 +3,14 @@ import api from "../services/axios";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 
-export const useUsuarioStore = create((set, get) => ({
+export const useUsuarioStore = create((set) => ({
   usuario: {
     id: null,
     cargo: "",
     nome: "",
     email: "",
     senha: "",
-    isLogged: localStorage.getItem("isLogged") === "true",
+    isLogged: false,
   },
 
   login: async (email, senha) => {
@@ -18,7 +18,6 @@ export const useUsuarioStore = create((set, get) => ({
       const response = await api.post("/login", { email, senha });
       const token = response.data;
       localStorage.setItem("token", token);
-      localStorage.setItem("isLogged", "true");
       const payload = jwtDecode(token);
       set({
         usuario: {
@@ -39,7 +38,6 @@ export const useUsuarioStore = create((set, get) => ({
         isLogged: true,
       };
     } catch (error) {
-      localStorage.setItem("isLogged", "false");
       set({
         usuario: {
           id: null,
