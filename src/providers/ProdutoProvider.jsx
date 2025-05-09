@@ -3,6 +3,7 @@ import { useProdutoStore } from '../stores/useProdutoStore';
 import { ProdutoContext } from '../contexts/ProdutoContext';
 import { useState, useEffect, useCallback } from 'react';
 import api from '../services/axios';
+import LoadingScreen from '../components/LoadingScreen';
 
 export function ProdutoProvider({ children }) {
   const { produtos, setProdutos, addProduto, updateProduto, removeProduto, clearProdutos } = useProdutoStore();
@@ -59,7 +60,7 @@ export function ProdutoProvider({ children }) {
     clearProdutos
   };
 
-  if (loading) return <div>Carregando produtos...</div>;
+  if (loading) return <LoadingScreen texto="Carregando..." />;
 
   return <ProdutoContext.Provider value={value}>{children}</ProdutoContext.Provider>;
 }

@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useProduto } from '../hooks/useProduto';
+import LoadingScreen from './LoadingScreen';
 
 export default function ReposicaoEstoque() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function ReposicaoEstoque() {
     navigate('/estoque');
   }
 
-  if (loading) return <div>Carregando produtos...</div>;
+  if (loading) return <LoadingScreen texto="Carregando..." />;
 
   return (
     <div className="bg-white p-4 rounded-2xl shadow-md h-full">
