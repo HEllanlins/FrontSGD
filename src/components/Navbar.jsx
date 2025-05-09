@@ -1,11 +1,15 @@
-import { useState, useEffect, useRef } from "react";
-import { UserIcon, Home, Settings, Users, Wrench, Warehouse, DollarSign, ChevronDown } from "lucide-react";
+import { useState, useEffect, useRef } from 'react';
+import { UserIcon, Home, Settings, Users, Wrench, Warehouse, DollarSign, ChevronDown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useUsuario } from '../hooks/useUsuario';
 
 function Navbar() {
   const [userDropdown, setUserDropdown] = useState(false);
   const [operacionalDropdown, setOperacionalDropdown] = useState(false);
   const userRef = useRef(null);
   const opRef = useRef(null);
+  const navigate = useNavigate();
+  const { usuario, logout } = useUsuario();
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -19,9 +23,14 @@ function Navbar() {
         setOperacionalDropdown(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <nav className="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
@@ -71,16 +80,16 @@ function Navbar() {
           onClick={() => setUserDropdown(!userDropdown)}
           className="flex items-center gap-2 bg-blue-700 px-4 py-2 rounded hover:bg-blue-800">
           <UserIcon className="w-5 h-5" />
-          <span>Usuario</span>
+          <span>{usuario.nome || 'Usuário'}</span>
         </button>
         {userDropdown && (
           <div className="absolute right-0 mt-2 w-44 bg-white text-black rounded shadow-md">
             <a href="#" className="block px-4 py-2 hover:bg-gray-100">
               Configurações
             </a>
-            <a href="/login" className="block px-4 py-2 hover:bg-gray-100">
+            <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100">
               Logout
-            </a>
+            </button>
           </div>
         )}
       </div>

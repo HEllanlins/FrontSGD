@@ -1,25 +1,23 @@
-import { toast } from "react-toastify";
-import { useState } from "react";
-import { useUsuarioStore } from "../stores/useUsuarioStore";
-import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useUsuario } from '../hooks/useUsuario';
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const login = useUsuarioStore((state) => state.login);
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const { login } = useUsuario();
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = async e => {
     e.preventDefault();
     try {
-      const usuario = await login(email, senha);
-      if (usuario && usuario.id) {
-        toast.success("Login realizado com sucesso!");
-        navigate("/");
-      }
-    } catch (e) {
-      console.error(e);
-      toast.error("Erro ao fazer login");
+      await login(email, senha);
+      toast.success('Login realizado com sucesso!');
+      navigate('/');
+    } catch (error) {
+      console.error('Erro ao fazer login:', error);
+      toast.error('Erro ao fazer login');
     }
   };
 
@@ -29,16 +27,12 @@ export default function Login() {
         <div className="bg-blue-600 w-1/3 flex flex-col justify-center p-5 rounded-l-lg text-white">
           <h1 className="text-4xl text-center font-bold">SGD</h1>
           <p className="mt-10 text-center text-sm">
-            Bem-vindo de volta! Conecte-se e continue transformando ideias em
-            resultados.
+            Bem-vindo de volta! Conecte-se e continue transformando ideias em resultados.
           </p>
         </div>
         <div className="w-2/3 flex flex-col justify-center p-10 rounded-r-lg">
           <h1 className="text-3xl text-center font-black">Login</h1>
-          <form
-            className="flex flex-col items-center w-full mt-6 space-y-5"
-            onSubmit={handleLogin}
-          >
+          <form className="flex flex-col items-center w-full mt-6 space-y-5" onSubmit={handleLogin}>
             <div className="w-2/3 flex flex-col gap-2">
               <label className="font-medium">Email</label>
               <input
@@ -46,7 +40,7 @@ export default function Login() {
                 type="text"
                 placeholder="Email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 required
               />
             </div>
@@ -57,7 +51,7 @@ export default function Login() {
                 type="password"
                 placeholder="Senha"
                 value={senha}
-                onChange={(e) => setSenha(e.target.value)}
+                onChange={e => setSenha(e.target.value)}
                 required
               />
             </div>
@@ -69,10 +63,7 @@ export default function Login() {
             </a>
             <span>
               Ainda não tem conta?
-              <a
-                href="/register"
-                className="text-blue-600 text-sm hover:underline"
-              >
+              <a href="/register" className="text-blue-600 text-sm hover:underline">
                 Clique aqui
               </a>
             </span>
