@@ -1,14 +1,25 @@
-import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
-
-const data = [
-  { name: "Concluídos", value: 40 },
-  { name: "Em Andamento", value: 30 },
-  { name: "Cancelados", value: 30 },
-];
-
-const COLORS = ["#00C49F", "#FFBB28", "#FF8042"];
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import api from '../services/axios';
+import { useState, useEffect } from 'react';
 
 export default function GraficoStatusServico() {
+  const [data, setData] = useState([]);
+  const COLORS = ['#00C49F', '#FFBB28', '#FF8042'];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get('/servico/status');
+        console.log('Dados recebidos:', response.data);
+        setData(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="bg-white p-4 rounded-2xl shadow-md">
       <h2 className="text-xl font-bold mb-4">Status dos Serviços</h2>
