@@ -6,14 +6,14 @@ import { useServiceStore } from "../stores/useServiceStore";
 import { ServiceContext } from "../contexts/ServiceContext";
 
 export function ServiceProvider({ children }) {
-  const { Services, setServices, addService, updateService, removeService, clearServices } = useServiceStore();
+  const { services, setServices, addService, updateService, removeService, clearServices } = useServiceStore();
   const [loading, setLoading] = useState(true);
 
   // Carregar serviços do backend ao iniciar
   useEffect(() => {
     async function fetchServices() {
       try {
-        const response = await api.get("/Service");
+        const response = await api.get("/servico");
         setServices(response.data);
       } catch {
         setServices([]);
@@ -26,7 +26,7 @@ export function ServiceProvider({ children }) {
   // Métodos para manipular Services
   const createService = useCallback(
     async (dados) => {
-      const response = await api.post("/Service", dados);
+      const response = await api.post("/servico", dados);
       addService(response.data);
       return response.data;
     },
@@ -35,7 +35,7 @@ export function ServiceProvider({ children }) {
 
   const editService = useCallback(
     async (id, dados) => {
-      const response = await api.put(`/Service/${id}`, dados);
+      const response = await api.put(`/servico/${id}`, dados);
       updateService(id, response.data);
       return response.data;
     },
@@ -44,14 +44,14 @@ export function ServiceProvider({ children }) {
 
   const deleteService = useCallback(
     async (id) => {
-      await api.delete(`/Service/${id}`);
+      await api.delete(`/servico/${id}`);
       removeService(id);
     },
     [removeService]
   );
 
   const value = {
-    Services,
+    services,
     loading,
     createService,
     editService,

@@ -5,7 +5,7 @@ const initialState = {
 };
 
 export const useProdutoStore = create((set) => ({
-  ...initialState,
+  produtos: initialState,
   setProdutos: (produtos) => set({ produtos }),
   addProduto: (produto) => set((state) => ({ produtos: [...state.produtos, produto] })),
   updateProduto: (id, dadosAtualizados) =>

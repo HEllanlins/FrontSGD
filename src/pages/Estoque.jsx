@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { useProduto } from '../hooks/useProduto';
-import Nav from '../components/Navbar';
-import SearchBar from '../components/SearchBar';
-import Table from '../components/Table';
-import StatusBadge from '../components/StatusBadge';
-import ProductModal from '../components/ProductModal';
-import { toast } from 'react-toastify';
+import { useState } from "react";
+import { useProduto } from "../hooks/useProduto";
+import Nav from "../components/Navbar";
+import SearchBar from "../components/SearchBar";
+import Table from "../components/Table";
+import StatusBadge from "../components/StatusBadge";
+import ProductModal from "../components/ProductModal";
+import { toast } from "react-toastify";
 
 const Estoque = () => {
   const { produtos, loading, createProduto, editProduto, deleteProduto } = useProduto();
@@ -13,18 +13,18 @@ const Estoque = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
 
-  const handleEdit = produto => {
+  const handleEdit = (produto) => {
     setProdutoSelecionado(produto);
     setModalOpen(true);
   };
 
-  const handleDelete = async produto => {
+  const handleDelete = async (produto) => {
     if (window.confirm(`Deseja excluir ${produto.nome}?`)) {
       try {
         await deleteProduto(produto.id);
-        toast.success('Produto excluído com sucesso');
+        toast.success("Produto excluído com sucesso");
       } catch (error) {
-        toast.error('Erro ao excluir o produto');
+        toast.error("Erro ao excluir o produto");
         console.error(error);
       }
     }
@@ -35,13 +35,13 @@ const Estoque = () => {
     setModalOpen(true);
   };
 
-  const handleSave = async produtoEditado => {
+  const handleSave = async (produtoEditado) => {
     if (produtoSelecionado && produtoEditado.id) {
       // Edição
       try {
         await editProduto(produtoEditado.id, produtoEditado);
       } catch (error) {
-        toast.error('Erro ao editar o produto');
+        toast.error("Erro ao editar o produto");
         console.error(error);
       }
     } else {
@@ -49,7 +49,7 @@ const Estoque = () => {
       try {
         await createProduto(produtoEditado);
       } catch (error) {
-        toast.error('Erro ao adicionar produto');
+        toast.error("Erro ao adicionar produto");
         console.error(error);
       }
     }
@@ -73,16 +73,16 @@ const Estoque = () => {
         <Table
           title="Produtos em Estoque"
           headers={[
-            { label: 'Produto', key: 'nome' },
-            { label: 'Categoria', key: 'categoria' },
-            { label: 'Quantidade', key: 'qtd_estoque' },
-            { label: 'Preço Unit.', key: 'preco' },
+            { label: "Produto", key: "nome" },
+            { label: "Categoria", key: "categoria" },
+            { label: "Quantidade", key: "qtd_estoque" },
+            { label: "Preço Unit.", key: "preco" },
             {
-              label: 'Status',
-              key: 'status',
-              render: row => <StatusBadge status={row.status} />
+              label: "Status",
+              key: "status",
+              render: (row) => <StatusBadge status={row.status} />,
             },
-            { label: 'Última Atualização', key: 'ultima_atualizacao' }
+            { label: "Última Atualização", key: "ultima_atualizacao" },
           ]}
           data={produtos}
           onEdit={handleEdit}

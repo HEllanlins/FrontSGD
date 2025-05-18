@@ -6,8 +6,9 @@ import { ServiceProvider } from "./ServiceProvider";
 export function Providers({ children }) {
   return (
     <UsuarioProvider>
-      <ProdutoProvider>{children}</ProdutoProvider>
-      <ServiceProvider>{children}</ServiceProvider>
+      <ProdutoProvider>
+        <ServiceProvider>{children}</ServiceProvider>
+      </ProdutoProvider>
     </UsuarioProvider>
   );
 }

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 
-export default function Modal({ isOpen, title, fields, selected, onSave, onCancel }) {
+export function Modal({ isOpen, title, fields, selected, onSave, onCancel }) {
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
