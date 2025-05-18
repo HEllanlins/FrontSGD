@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Nav from "../components/Navbar";
 import ClienteTable from "../components/ClienteTable";
-import api from "../services/axios";
 
 const Clientes = () => {
+  useEffect(() => {
+    document.title = "SGD - Clientes";
+  });
+
   const [clientes, setClientes] = useState([
     { nome: "João Silva", email: "joao@exemplo.com", telefone: "(11) 98765-4321", empresa: "Empresa A" },
     { nome: "Maria Oliveira", email: "maria@exemplo.com", telefone: "(21) 91234-5678", empresa: "Empresa B" },
@@ -26,9 +29,7 @@ const Clientes = () => {
     const telefone = prompt("Novo telefone:", cliente.telefone);
     const empresa = prompt("Nova empresa:", cliente.empresa);
     if (nome && email && telefone && empresa) {
-      const atualizados = clientes.map((c) =>
-        c === cliente ? { nome, email, telefone, empresa } : c
-      );
+      const atualizados = clientes.map((c) => (c === cliente ? { nome, email, telefone, empresa } : c));
       setClientes(atualizados);
     }
   };
@@ -46,16 +47,13 @@ const Clientes = () => {
       <div className="p-6 bg-white min-h-screen">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">Gerenciamento de Clientes</h1>
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-gray-800"
-            onClick={handleAdd}
-          >
+          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-gray-800" onClick={handleAdd}>
             ➕ Adicionar Cliente
           </button>
         </div>
         <ClienteTable clientes={clientes} onEdit={handleEdit} onDelete={handleDelete} />
       </div>
-      </>
+    </>
   );
 };
 

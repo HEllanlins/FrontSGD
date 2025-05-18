@@ -16,12 +16,12 @@ export function ServiceProvider({ children }) {
         const response = await api.get("/servico");
         setServices(response.data);
       } catch {
-        setServices([]);
+        clearServices();
       }
       setLoading(false);
     }
     fetchServices();
-  }, [setServices]);
+  }, [setServices, clearServices]);
 
   // Métodos para manipular Services
   const createService = useCallback(
@@ -60,7 +60,7 @@ export function ServiceProvider({ children }) {
     clearServices,
   };
 
-  if (loading) return <LoadingScreen texto="Carregando..." />;
+  if (loading) return <LoadingScreen texto="Carregando Serviços..." />;
 
   return <ServiceContext.Provider value={value}>{children}</ServiceContext.Provider>;
 }

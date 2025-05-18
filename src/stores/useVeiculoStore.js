@@ -1,20 +1,27 @@
 import { create } from "zustand";
 
-const useVeiculoStore = create((set) => ({
+const initialState = {
   veiculos: [],
-  addVeiculo: (veiculo) =>
-    set((state) => ({ veiculos: [...state.veiculos, veiculo] })),
+};
+
+const useVeiculoStore = create((set) => ({
+  veiculos: initialState,
+
   setVeiculos: (veiculos) => set({ veiculos }),
+
+  addVeiculo: (veiculo) => set((state) => ({ veiculos: [...state.veiculos, veiculo] })),
+
   removeVeiculo: (id) =>
     set((state) => ({
       veiculos: state.veiculos.filter((veiculo) => veiculo.id !== id),
     })),
+
   updateVeiculo: (id, updatedVeiculo) =>
     set((state) => ({
-      veiculos: state.veiculos.map((veiculo) =>
-        veiculo.id === id ? { ...veiculo, ...updatedVeiculo } : veiculo
-      ),
+      veiculos: state.veiculos.map((veiculo) => (veiculo.id === id ? { ...veiculo, ...updatedVeiculo } : veiculo)),
     })),
+
+  clearVeiculos: () => set(initialState),
 }));
 
 export default useVeiculoStore;

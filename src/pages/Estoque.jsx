@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useProduto } from "../hooks/useProduto";
 import Nav from "../components/Navbar";
 import SearchBar from "../components/SearchBar";
@@ -8,6 +8,10 @@ import ProductModal from "../components/ProductModal";
 import { toast } from "react-toastify";
 
 const Estoque = () => {
+  useEffect(() => {
+    document.title = "SGD - Estoque";
+  });
+
   const { produtos, loading, createProduto, editProduto, deleteProduto } = useProduto();
 
   const [isModalOpen, setModalOpen] = useState(false);

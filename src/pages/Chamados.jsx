@@ -7,6 +7,10 @@ import { Modal } from "../components/Modal";
 import SearchBar from "../components/SearchBar";
 
 export default function Chamados() {
+  useEffect(() => {
+    document.title = "SGD - Chamados";
+  });
+
   const { services, loading, createService, editService, deleteService } = useService();
 
   const [isModalOpen, setModalOpen] = useState(false);
@@ -39,6 +43,7 @@ export default function Chamados() {
       // Edição
       try {
         await editService(serviceEditada.id, serviceEditada);
+        toast.success("Serviço editado com sucesso");
       } catch (error) {
         toast.error("Erro ao editar o serviço");
         console.error(error);
@@ -70,6 +75,7 @@ export default function Chamados() {
           </div>
         </div>
         <Table
+          title="Serviços"
           headers={[
             { label: "Cliente", key: "cliente_nome" },
             { label: "Categoria", key: "categoria_nome" },

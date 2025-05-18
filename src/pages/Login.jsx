@@ -1,23 +1,27 @@
-import { toast } from 'react-toastify';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useUsuario } from '../hooks/useUsuario';
+import { toast } from "react-toastify";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useUsuario } from "../hooks/useUsuario";
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  useEffect(() => {
+    document.title = "SGD - Login";
+  });
+
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
   const { login } = useUsuario();
   const navigate = useNavigate();
 
-  const handleLogin = async e => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
       await login(email, senha);
-      toast.success('Login realizado com sucesso!');
-      navigate('/');
+      toast.success("Login realizado com sucesso!");
+      navigate("/");
     } catch (error) {
-      console.error('Erro ao fazer login:', error);
-      toast.error('Erro ao fazer login');
+      console.error("Erro ao fazer login:", error);
+      toast.error("Erro ao fazer login");
     }
   };
 
@@ -40,7 +44,7 @@ export default function Login() {
                 type="text"
                 placeholder="Email"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
@@ -51,7 +55,7 @@ export default function Login() {
                 type="password"
                 placeholder="Senha"
                 value={senha}
-                onChange={e => setSenha(e.target.value)}
+                onChange={(e) => setSenha(e.target.value)}
                 required
               />
             </div>

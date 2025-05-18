@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Nav from "../components/Navbar";
 import { Pencil, Trash2 } from "lucide-react";
 
 const Funcionarios = () => {
+  useEffect(() => {
+    document.title = "SGD - Financeiro";
+  });
+
   const [funcionarios, setFuncionarios] = useState([
     {
       nome: "João Silva",
