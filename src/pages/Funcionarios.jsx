@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 
 const Funcionarios = () => {
   const { funcionarios, loading, createFuncionario, editFuncionario, deleteFuncionario } = useFuncionario();
-=======
 import { useState, useEffect } from "react";
 import Nav from "../components/Navbar";
 import { Pencil, Trash2 } from "lucide-react";
