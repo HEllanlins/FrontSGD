@@ -1,58 +1,55 @@
-<<<<<<< HEAD
-import { useState } from 'react';
-import { useFuncionario } from '../hooks/useFuncionario';
-import Nav from '../components/Navbar';
-import SearchBar from '../components/SearchBar';
-import Table from '../components/Table';
-import FuncionarioModal from '../components/FuncionarioModal';
-import { toast } from 'react-toastify';
+import React, { useState, useEffect } from "react";
+import { useFuncionario } from "../hooks/useFuncionario";
+import Nav from "../components/Navbar";
+import SearchBar from "../components/SearchBar";
+import Table from "../components/Table";
+import FuncionarioModal from "../components/FuncionarioModal";
+import { toast } from "react-toastify";
+
+const StatusBadge = ({ status }) => {
+  const getStatusColor = (status) => {
+    switch (status?.toLowerCase()) {
+      case "ativo":
+        return "bg-green-100 text-green-800";
+      case "inativo":
+        return "bg-red-100 text-red-800";
+      case "férias":
+        return "bg-yellow-100 text-yellow-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  return (
+    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(status)}`}>
+      {status}
+    </span>
+  );
+};
 
 const Funcionarios = () => {
   const { funcionarios, loading, createFuncionario, editFuncionario, deleteFuncionario } = useFuncionario();
-import { useState, useEffect } from "react";
-import Nav from "../components/Navbar";
-import { Pencil, Trash2 } from "lucide-react";
-
-const Funcionarios = () => {
-  useEffect(() => {
-    document.title = "SGD - Financeiro";
-  });
-
-  const [funcionarios, setFuncionarios] = useState([
-    {
-      nome: "João Silva",
-      cargo: "Dedetizador",
-      departamento: "Operacional",
-      salario: 2500,
-      status: "Ativo",
-      admissao: "15/03/2023",
-    },
-    {
-      nome: "Maria Souza",
-      cargo: "Administrativo",
-      departamento: "RH",
-      salario: 3200,
-      status: "Ativo",
-      admissao: "10/01/2022",
-    },
-  ]);
->>>>>>> f95ab878a03bc99cdd34ee7ef57a675e55a1a72d
-
   const [isModalOpen, setModalOpen] = useState(false);
   const [funcionarioSelecionado, setFuncionarioSelecionado] = useState(null);
+  const [busca, setBusca] = useState("");
 
-  const handleEdit = funcionario => {
+  useEffect(() => {
+    document.title = "SGD - Funcionários";
+  }, []);
+
+  const handleEdit = (funcionario) => {
     setFuncionarioSelecionado(funcionario);
     setModalOpen(true);
   };
 
-  const handleDelete = async funcionario => {
+  const handleDelete = async (funcionario) => {
     if (window.confirm(`Deseja excluir ${funcionario.nome}?`)) {
       try {
         await deleteFuncionario(funcionario.id);
-        toast.success('Funcionário excluído com sucesso');
+        toast.success("Funcionário excluído com sucesso");
       } catch (error) {
-        toast.error('Erro ao excluir funcionário');
+        console.error("Erro ao excluir funcionário:", error);
+        toast.error("Erro ao excluir funcionário");
       }
     }
   };
@@ -62,28 +59,58 @@ const Funcionarios = () => {
     setModalOpen(true);
   };
 
-  const handleSave = async funcionarioEditado => {
+  const handleSave = async (funcionarioEditado) => {
     try {
-      if (funcionarioSelecionado && funcionarioEditado.id) {
-        await editFuncionario(funcionarioEditado.id, funcionarioEditado);
+      if (funcionarioSelecionado && funcionarioSelecionado.id) {
+        await editFuncionario(funcionarioSelecionado.id, funcionarioEditado);
+        toast.success("Funcionário editado com sucesso");
       } else {
         await createFuncionario(funcionarioEditado);
+        toast.success("Funcionário criado com sucesso");
       }
+      setModalOpen(false);
+      setFuncionarioSelecionado(null);
     } catch (error) {
-      toast.error('Erro ao salvar funcionário');
+      console.error("Erro ao salvar funcionário:", error);
+      toast.error("Erro ao salvar funcionário");
     }
   };
 
-  if (loading) return <div>Carregando funcionários...</div>;
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setFuncionarioSelecionado(null);
+  };
+
+  const funcionariosFiltrados = funcionarios?.filter(
+    (f) =>
+      f.nome.toLowerCase().includes(busca.toLowerCase()) ||
+      f.cargo.toLowerCase().includes(busca.toLowerCase()) ||
+      f.email.toLowerCase().includes(busca.toLowerCase())
+  );
+
+  if (loading) {
+    return (
+      <>
+        <Nav />
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="text-lg">Carregando funcionários...</div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
       <Nav />
       <div className="p-6 bg-white min-h-screen">
         <h1 className="text-2xl font-bold text-blue-800 mb-6">Gerenciamento de Funcionários</h1>
+
         <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
-          <SearchBar />
-          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onClick={handleAdd}>
+          <SearchBar value={busca} onChange={setBusca} />
+          <button
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+            onClick={handleAdd}
+          >
             ➕ Adicionar Funcionário
           </button>
         </div>
@@ -91,17 +118,17 @@ const Funcionarios = () => {
         <Table
           title="Funcionários Cadastrados"
           headers={[
-            { label: 'Nome', key: 'nome' },
-            { label: 'Cargo', key: 'cargo' },
-            { label: 'E-mail', key: 'email' },
-            { label: 'Data de Admissão', key: 'data_admissao' },
+            { label: "Nome", key: "nome" },
+            { label: "Cargo", key: "cargo" },
+            { label: "E-mail", key: "email" },
+            { label: "Data de Admissão", key: "data_admissao" },
             {
-              label: 'Status',
-              key: 'status',
-              render: row => <StatusBadge status={row.status} />
-            }
+              label: "Status",
+              key: "status",
+              render: (row) => <StatusBadge status={row.status} />,
+            },
           ]}
-          data={funcionarios}
+          data={funcionariosFiltrados}
           onEdit={handleEdit}
           onDelete={handleDelete}
         />
@@ -109,7 +136,7 @@ const Funcionarios = () => {
 
       <FuncionarioModal
         isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={handleCloseModal}
         onSave={handleSave}
         initialData={funcionarioSelecionado}
       />

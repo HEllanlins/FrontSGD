@@ -1,103 +1,132 @@
-<<<<<<< HEAD
-import { useState } from 'react';
-import { useCliente } from '../hooks/useCliente';
+import React, { useState, useEffect } from 'react';
 import Nav from '../components/Navbar';
 import SearchBar from '../components/SearchBar';
 import Table from '../components/Table';
-import ClienteModal from '../components/ClienteModal'; // componente modal para cliente
+import ClienteModal from '../components/ClienteModal';
 import { toast } from 'react-toastify';
 
-const Clientes = () => {
-  const { clientes, loading, createCliente, editCliente, deleteCliente } = useCliente();
+// Componente para o badge de status
+const StatusBadge = ({ status }) => {
+  const getStatusColor = (status) => {
+    switch (status?.toLowerCase()) {
+      case 'ativo':
+        return 'bg-green-100 text-green-800';
+      case 'inativo':
+        return 'bg-red-100 text-red-800';
+      case 'pendente':
+        return 'bg-yellow-100 text-yellow-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
 
+  return (
+    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(status)}`}>
+      {status}
+    </span>
+  );
+};
+
+const Clientes = () => {
+  const [clientes, setClientes] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [clienteSelecionado, setClienteSelecionado] = useState(null);
+  const [busca, setBusca] = useState("");
 
-  const handleEdit = cliente => {
+  useEffect(() => {
+    document.title = "SGD - Clientes";
+
+    // Dados mockados
+    setClientes([
+      {
+        id: 1,
+        nome: "Alice Martins",
+        email: "alice.martins@example.com",
+        telefone: "(11) 98765-4321",
+        data_cadastro: "2022-02-15",
+        status: "ativo"
+      },
+      {
+        id: 2,
+        nome: "Carlos Henrique",
+        email: "carlos.henrique@example.com",
+        telefone: "(21) 99876-5432",
+        data_cadastro: "2023-05-20",
+        status: "pendente"
+      },
+      {
+        id: 3,
+        nome: "Fernanda Silva",
+        email: "fernanda.silva@example.com",
+        telefone: "(31) 91234-5678",
+        data_cadastro: "2024-01-10",
+        status: "inativo"
+      }
+    ]);
+  }, []);
+
+  const handleEdit = (cliente) => {
     setClienteSelecionado(cliente);
     setModalOpen(true);
   };
 
-  const handleDelete = async cliente => {
+  const handleDelete = (cliente) => {
     if (window.confirm(`Deseja excluir ${cliente.nome}?`)) {
-      try {
-        await deleteCliente(cliente.id);
-        toast.success('Cliente excluído com sucesso');
-      } catch (error) {
-        toast.error('Erro ao excluir cliente');
-      }
+      setClientes((prev) => prev.filter((c) => c.id !== cliente.id));
+      toast.success('Cliente excluído com sucesso');
     }
   };
-=======
-import { useEffect, useState } from "react";
-import Nav from "../components/Navbar";
-import ClienteTable from "../components/ClienteTable";
-
-const Clientes = () => {
-  useEffect(() => {
-    document.title = "SGD - Clientes";
-  });
-
-  const [clientes, setClientes] = useState([
-    { nome: "João Silva", email: "joao@exemplo.com", telefone: "(11) 98765-4321", empresa: "Empresa A" },
-    { nome: "Maria Oliveira", email: "maria@exemplo.com", telefone: "(21) 91234-5678", empresa: "Empresa B" },
-    { nome: "Carlos Santos", email: "carlos@exemplo.com", telefone: "(31) 99876-5432", empresa: "Empresa C" },
-  ]);
->>>>>>> f95ab878a03bc99cdd34ee7ef57a675e55a1a72d
 
   const handleAdd = () => {
     setClienteSelecionado(null);
     setModalOpen(true);
   };
 
-  const handleSave = async clienteEditado => {
-    try {
-      if (clienteSelecionado && clienteEditado.id) {
-        await editCliente(clienteEditado.id, clienteEditado);
-      } else {
-        await createCliente(clienteEditado);
-      }
-    } catch (error) {
-      toast.error('Erro ao salvar cliente');
+  const handleSave = (clienteEditado) => {
+    if (clienteSelecionado?.id) {
+      setClientes((prev) =>
+        prev.map((c) => (c.id === clienteSelecionado.id ? { ...c, ...clienteEditado } : c))
+      );
+      toast.success('Cliente editado com sucesso');
+    } else {
+      const novoCliente = {
+        id: Date.now(),
+        ...clienteEditado,
+        data_cadastro: new Date().toISOString().split('T')[0],
+      };
+      setClientes((prev) => [...prev, novoCliente]);
+      toast.success('Cliente criado com sucesso');
     }
+    setModalOpen(false);
+    setClienteSelecionado(null);
   };
 
-<<<<<<< HEAD
-  if (loading) return <div>Carregando clientes...</div>;
-=======
-  const handleEdit = (cliente) => {
-    const nome = prompt("Novo nome:", cliente.nome);
-    const email = prompt("Novo email:", cliente.email);
-    const telefone = prompt("Novo telefone:", cliente.telefone);
-    const empresa = prompt("Nova empresa:", cliente.empresa);
-    if (nome && email && telefone && empresa) {
-      const atualizados = clientes.map((c) => (c === cliente ? { nome, email, telefone, empresa } : c));
-      setClientes(atualizados);
-    }
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setClienteSelecionado(null);
   };
 
-  const handleDelete = (cliente) => {
-    const confirm = window.confirm(`Deseja excluir ${cliente.nome}?`);
-    if (confirm) {
-      setClientes(clientes.filter((c) => c !== cliente));
-    }
-  };
->>>>>>> f95ab878a03bc99cdd34ee7ef57a675e55a1a72d
+  const clientesFiltrados = clientes.filter(
+    (c) =>
+      c.nome.toLowerCase().includes(busca.toLowerCase()) ||
+      c.email.toLowerCase().includes(busca.toLowerCase()) ||
+      c.telefone.toLowerCase().includes(busca.toLowerCase())
+  );
 
   return (
     <>
       <Nav />
       <div className="p-6 bg-white min-h-screen">
-<<<<<<< HEAD
-        <h1 className="text-2xl font-bold text-blue-800 mb-6">Gerenciamento de Clientes</h1>
+        <h1 className="text-2xl font-bold text-blue-800 mb-6">
+          Gerenciamento de Clientes
+        </h1>
+
         <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
-          <SearchBar />
-          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onClick={handleAdd}>
-=======
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold">Gerenciamento de Clientes</h1>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-gray-800" onClick={handleAdd}>
->>>>>>> f95ab878a03bc99cdd34ee7ef57a675e55a1a72d
+          <SearchBar value={busca} onChange={setBusca} />
+          <button 
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+            onClick={handleAdd}
+          >
             ➕ Adicionar Cliente
           </button>
         </div>
@@ -112,24 +141,21 @@ const Clientes = () => {
             {
               label: 'Status',
               key: 'status',
-              render: row => <StatusBadge status={row.status} />
+              render: (row) => <StatusBadge status={row.status} />
             }
           ]}
-          data={clientes}
+          data={clientesFiltrados}
           onEdit={handleEdit}
           onDelete={handleDelete}
         />
       </div>
-<<<<<<< HEAD
 
       <ClienteModal
         isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={handleCloseModal}
         onSave={handleSave}
         initialData={clienteSelecionado}
       />
-=======
->>>>>>> f95ab878a03bc99cdd34ee7ef57a675e55a1a72d
     </>
   );
 };

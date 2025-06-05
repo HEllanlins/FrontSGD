@@ -1,218 +1,270 @@
-import Nav from "../components/Navbar";
-import Table from "../components/Table";
-import useChamados from "../hooks/useChamados";
-import SearchBar from "../components/SearchBar";
+import React, { useEffect, useState } from 'react';
+import Nav from '../components/Navbar';
+import Table from '../components/Table';
+import SearchBar from '../components/SearchBar';
+import { toast } from 'react-toastify';
+// Assumindo que você tem um hook para chamados
+// import { useChamados } from '../hooks/useChamados';
+// import ChamadoModal from '../components/ChamadoModal';
 
-export default function Chamados() {
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [chamadoSelecionado, setChamadoSelecionado] = useState(null);
-
-  const chamado = useChamadoStore((state) => state.chamado);
-  const setChamados = useChamadoStore((state) => state.setChamados);
-  const addChamados = useChamadoStore((state) => state.addChamados);
-  const updateChamados = useChamadoStore((state) => state.updateChamados);
-  const removeChamados = useChamadoStore((state) => state.removeChamados);
-
-  useEffect(() => {
-    async function getData() {
-      const resposta = await api.get("/chamado");
-      const chamadosComId = resposta.data.map((v) => ({
-        ...v,
-        id: v.id_chamado,
-      }));
-      setChamados(chamadosComId);
+// Componente para o badge de status
+const StatusBadge = ({ status }) => {
+  const getStatusColor = (status) => {
+    switch (status?.toLowerCase()) {
+      case 'aberto':
+        return 'bg-blue-100 text-blue-800';
+      case 'em andamento':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'concluído':
+        return 'bg-green-100 text-green-800';
+      case 'cancelado':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
-    getData();
-  }, [setChamados]);
-
-  const handleAdd = () => {
-    setChamadoSelecionado(null);
-    setModalOpen(true);
   };
 
+  return (
+    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(status)}`}>
+      {status}
+    </span>
+  );
+};
+
+export default function Chamados() {
+  // Estados locais
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [chamadoSelecionado, setChamadoSelecionado] = useState(null);
+  const [chamados, setChamados] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Hook customizado (descomente quando implementar)
+  // const { chamados, loading, createChamado, editChamado, deleteChamado } = useChamados();
+
+  // Configurar título da página
+  useEffect(() => {
+    document.title = "SGD - Chamados";
+  }, []);
+
+  // Dados de exemplo (remova quando implementar o hook)
+  useEffect(() => {
+    const dadosExemplo = [
+      {
+        id: 1,
+        cliente_nome: "João Silva",
+        categoria_nome: "Dedetização",
+        descricao: "Dedetização residencial",
+        metragem: 120,
+        valor: 250.00,
+        status: "Aberto",
+        data_criacao: "2025-01-15"
+      },
+      {
+        id: 2,
+        cliente_nome: "Maria Santos",
+        categoria_nome: "Desratização",
+        descricao: "Controle de pragas comercial",
+        metragem: 300,
+        valor: 450.00,
+        status: "Em Andamento",
+        data_criacao: "2025-01-10"
+      }
+    ];
+    setChamados(dadosExemplo);
+  }, []);
+
+  // Função para editar chamado
   const handleEdit = (chamado) => {
     setChamadoSelecionado(chamado);
     setModalOpen(true);
   };
 
-  const handleSave = async (chamadoData) => {
-    if (chamadoData.id) {
-      // Edit
-      await api.put(`/chamado/${chamadoData.id}`, chamadoData);
-      updateChamados(chamadoData.id, chamadoData);
-    } else {
-      // Add
-      const resposta = await api.post("/veiculo", chamadoData);
-      addChamado({ ...chamadoData, id: resposta.data.id_chamado });
-    }
-    setModalOpen(false);
-  };
-  const handleDelete = async (veiculo) => {
-    if (
-      window.confirm(
-        `Tem certeza que deseja excluir o chamado ${chamado.modelo}?`
-      )
-    ) {
+  // Função para deletar chamado
+  const handleDelete = async (chamado) => {
+    if (window.confirm(`Deseja excluir o chamado de ${chamado.cliente_nome}?`)) {
       try {
-        await api.delete(`/chamado/${chamado.id}`);
-        removeChamado(chamado.id);
-      } catch (e) {
-        toast.error("Erro ao deletar o chamado");
-        console.error(e)};  
-      }
-    }
-  }
-import { useEffect, useState } from "react";
-import Nav from "../components/Navbar";
-import Table from "../components/Table";
-import { useService } from "../hooks/useService";
-import { toast } from "react-toastify";
-import { Modal } from "../components/Modal";
-import SearchBar from "../components/SearchBar";
-
-export default function Chamados() {
-  useEffect(() => {
-    document.title = "SGD - Chamados";
-  });
-
-  const { services, loading, createService, editService, deleteService } = useService();
-
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [serviceSelecionada, setServiceSelecionada] = useState(null);
-
-  const handleEdit = (service) => {
-    setServiceSelecionada(service);
-    setModalOpen(true);
-  };
-
-  const handleDelete = async (service) => {
-    if (window.confirm(`Deseja excluir ${service.nome}?`)) {
-      try {
-        await deleteService(service.id);
-        toast.success("Serviço excluído com sucesso");
+        // await deleteChamado(chamado.id);
+        
+        // Simulação da exclusão (remova quando implementar o hook)
+        setChamados(prev => prev.filter(c => c.id !== chamado.id));
+        
+        toast.success('Chamado excluído com sucesso');
       } catch (error) {
-        toast.error("Erro ao excluir o serviço");
-        console.error(error);
+        console.error('Erro ao excluir chamado:', error);
+        toast.error('Erro ao excluir chamado');
       }
     }
   };
 
-  if (loading) return <p className="p-4">Carregando chamados...</p>;
+  // Função para adicionar novo chamado
   const handleAdd = () => {
-    setServiceSelecionada(null);
+    setChamadoSelecionado(null);
     setModalOpen(true);
   };
 
-  const handleSave = async (serviceEditada) => {
-    if (serviceSelecionada && serviceEditada.id) {
-      // Edição
-      try {
-        await editService(serviceEditada.id, serviceEditada);
-        toast.success("Serviço editado com sucesso");
-      } catch (error) {
-        toast.error("Erro ao editar o serviço");
-        console.error(error);
+  // Função para salvar chamado (criar ou editar)
+  const handleSave = async (chamadoData) => {
+    try {
+      if (chamadoSelecionado && chamadoSelecionado.id) {
+        // await editChamado(chamadoSelecionado.id, chamadoData);
+        
+        // Simulação da edição (remova quando implementar o hook)
+        setChamados(prev => prev.map(c => 
+          c.id === chamadoSelecionado.id ? { ...c, ...chamadoData } : c
+        ));
+        
+        toast.success('Chamado editado com sucesso');
+      } else {
+        // await createChamado(chamadoData);
+        
+        // Simulação da criação (remova quando implementar o hook)
+        const novoChamado = {
+          ...chamadoData,
+          id: Date.now(), // ID temporário
+          status: 'Aberto',
+          data_criacao: new Date().toISOString().split('T')[0]
+        };
+        setChamados(prev => [...prev, novoChamado]);
+        
+        toast.success('Chamado criado com sucesso');
       }
-    } else {
-      // Novo serviço
-      try {
-        await createService(serviceEditada);
-      } catch (error) {
-        toast.error("Erro ao adicionar serviço");
-        console.error(error);
-      }
+      setModalOpen(false);
+      setChamadoSelecionado(null);
+    } catch (error) {
+      console.error('Erro ao salvar chamado:', error);
+      toast.error('Erro ao salvar chamado');
     }
   };
 
-  if (loading) return <div>Carregando serviços...</div>;
+  // Função para fechar modal
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setChamadoSelecionado(null);
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <>
+        <Nav />
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="text-lg">Carregando chamados...</div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
       <Nav />
-      <div className="p-4">
-        <h1 className="text-2xl font-bold text-blue-800 mb-6">Gerenciamento de Chamados</h1>
+      <div className="p-6 bg-white min-h-screen">
+        <h1 className="text-2xl font-bold text-blue-800 mb-6">
+          Gerenciamento de Chamados
+        </h1>
+        
         <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
           <SearchBar />
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
+          <button 
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
             onClick={handleAdd}
           >
-            ➕ Adicionar Veículo
+            ➕ Adicionar Chamado
           </button>
         </div>
-        <Table headers={headers} data={chamados} />
+
+        <Table
+          title="Chamados de Serviço"
+          headers={[
+            { label: 'Cliente', key: 'cliente_nome' },
+            { label: 'Categoria', key: 'categoria_nome' },
+            { label: 'Descrição', key: 'descricao' },
+            { label: 'Metragem (m²)', key: 'metragem' },
+            { label: 'Valor (R$)', key: 'valor', render: (row) => `R$ ${row.valor?.toFixed(2)}` },
+            { 
+              label: 'Status', 
+              key: 'status',
+              render: (row) => <StatusBadge status={row.status} />
+            },
+            { label: 'Data', key: 'data_criacao' }
+          ]}
+          data={chamados || []}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       </div>
+
+      {/* Modal simples (substitua pelo ChamadoModal quando implementar) */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow w-full max-w-md">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-lg font-bold mb-4">
               {chamadoSelecionado ? "Editar Chamado" : "Adicionar Chamado"}
             </h2>
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
-                await handleSave(chamadoSelecionado);
+                const formData = new FormData(e.target);
+                const data = {
+                  cliente_nome: formData.get('cliente_nome'),
+                  categoria_nome: formData.get('categoria_nome'),
+                  descricao: formData.get('descricao'),
+                  metragem: parseFloat(formData.get('metragem')),
+                  valor: parseFloat(formData.get('valor'))
+                };
+                await handleSave(data);
               }}
             >
               <input
-                className="mb-2 border p-2 w-full"
-                value={chamadoSelecionado?.modelo || ""}
-                onChange={(e) =>
-                  setChamadoSelecionado({
-                    ...chamadoSelecionado,
-                    modelo: e.target.value,
-                  })
-                }
-                placeholder="Modelo"
+                name="cliente_nome"
+                className="mb-2 border p-2 w-full rounded"
+                defaultValue={chamadoSelecionado?.cliente_nome || ""}
+                placeholder="Nome do Cliente"
                 required
               />
               <input
-                className="mb-2 border p-2 w-full"
-                value={chamadoSelecionado?.ano || ""}
-                onChange={(e) =>
-                  setChamadoSelecionado({
-                    ...chamadoSelecionado,
-                    ano: e.target.value,
-                  })
-                }
-                placeholder="Ano"
+                name="categoria_nome"
+                className="mb-2 border p-2 w-full rounded"
+                defaultValue={chamadoSelecionado?.categoria_nome || ""}
+                placeholder="Categoria do Serviço"
+                required
+              />
+              <textarea
+                name="descricao"
+                className="mb-2 border p-2 w-full rounded"
+                defaultValue={chamadoSelecionado?.descricao || ""}
+                placeholder="Descrição do serviço"
+                rows="3"
                 required
               />
               <input
-                className="mb-2 border p-2 w-full"
-                value={chamadoSelecionado?.marca || ""}
-                onChange={(e) =>
-                  setChamadoSelecionado({
-                    ...chamadoSelecionado,
-                    marca: e.target.value,
-                  })
-                }
-                placeholder="Marca"
+                name="metragem"
+                type="number"
+                step="0.01"
+                className="mb-2 border p-2 w-full rounded"
+                defaultValue={chamadoSelecionado?.metragem || ""}
+                placeholder="Metragem (m²)"
                 required
               />
               <input
-                className="mb-2 border p-2 w-full"
-                value={chamadoSelecionado?.placa || ""}
-                onChange={(e) =>
-                  setChamadoSelecionado({
-                    ...chamadoSelecionado,
-                    placa: e.target.value,
-                  })
-                }
-                placeholder="Placa"
+                name="valor"
+                type="number"
+                step="0.01"
+                className="mb-2 border p-2 w-full rounded"
+                defaultValue={chamadoSelecionado?.valor || ""}
+                placeholder="Valor (R$)"
                 required
               />
               <div className="flex gap-2 mt-4">
                 <button
                   type="submit"
-                  className="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer"
+                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
                 >
                   Salvar
                 </button>
                 <button
                   type="button"
-                  className="bg-gray-300 px-4 py-2 rounded cursor-pointer"
-                  onClick={() => setModalOpen(false)}
+                  className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400 transition-colors"
+                  onClick={handleCloseModal}
                 >
                   Cancelar
                 </button>
@@ -221,49 +273,6 @@ export default function Chamados() {
           </div>
         </div>
       )}
-      <div className="p-6 bg-white min-h-screen">
-        <h1 className="text-2xl font-bold text-blue-800 mb-6">Gerenciamento de Estoque</h1>
-        <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
-          <SearchBar />
-          <div className="flex gap-2">
-            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onClick={handleAdd}>
-              ➕ Adicionar Produto
-            </button>
-          </div>
-        </div>
-        <Table
-          title="Serviços"
-          headers={[
-            { label: "Cliente", key: "cliente_nome" },
-            { label: "Categoria", key: "categoria_nome" },
-            { label: "Observação", key: "descricao" },
-            { label: "Metragem(m²)", key: "Metragem" },
-            { label: "Valor(R$)", key: "valor" },
-            { label: "Status", key: "status" },
-          ]}
-          data={services}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-      </div>
-
-      <Modal
-        isOpen={isModalOpen}
-        title={serviceSelecionada ? "Editar Serviço" : "Adicionar Serviço"}
-        fields={[
-          { key: "cliente_nome", label: "Cliente" }, // Trocar Futuramente por um select
-          { key: "categoria_nome", label: "Categoria" }, // Trocar futuramente por um select
-          { key: "descricao", label: "Observação" },
-          { key: "Metragem", label: "Metragem(m²)", type: "number" },
-          { key: "valor", label: "Valor(R$)", type: "number" },
-        ]}
-        selected={serviceSelecionada}
-        onSave={async (data) => {
-          await handleSave(data);
-          setModalOpen(false);
-        }}
-        onCancel={() => setModalOpen(false)}
-      />
     </>
-  )
+  );
 }
