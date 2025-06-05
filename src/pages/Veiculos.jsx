@@ -77,6 +77,7 @@ export default function Veiculos() {
     <>
       <Nav />
       <div className="h-full w-full px-10 py-5">
+        <h1 className="text-2xl font-bold text-blue-800 mb-6">Gerenciamento de Veiculos</h1>
         <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
           <SearchBar />
           <button
