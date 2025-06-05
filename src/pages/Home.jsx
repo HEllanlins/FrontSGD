@@ -1,10 +1,15 @@
-import Navbar from '../components/Navbar';
-import GraficoStatusServico from '../components/GraficoStatusServico';
-import GraficoMetaMensal from '../components/GraficoMetaMensal';
-import ReposicaoEstoque from '../components/ReposicaoEstoque';
-import TodoList from '../components/TodoList';
+import Navbar from "../components/Navbar";
+import GraficoStatusServico from "../components/GraficoStatusServico";
+import GraficoMetaMensal from "../components/GraficoMetaMensal";
+import ReposicaoEstoque from "../components/ReposicaoEstoque";
+import TodoList from "../components/TodoList";
+import { useEffect } from "react";
 
 export default function Home() {
+  useEffect(() => {
+    document.title = "SGD - Dashboard";
+  });
+
   return (
     <>
       <Navbar />

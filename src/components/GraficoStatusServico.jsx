@@ -1,19 +1,18 @@
-import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
-import api from '../services/axios';
-import { useState, useEffect } from 'react';
+import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import api from "../services/axios";
+import { useState, useEffect } from "react";
 
 export default function GraficoStatusServico() {
   const [data, setData] = useState([]);
-  const COLORS = ['#00C49F', '#FFBB28', '#FF8042'];
+  const COLORS = ["#00C49F", "#FFBB28", "#FF8042"];
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/servico/status');
-        console.log('Dados recebidos:', response.data);
+        const response = await api.get("/servico/status");
         setData(response.data);
       } catch (error) {
-        console.error('Erro ao buscar dados:', error);
+        console.error("Erro ao buscar dados:", error);
       }
     };
 

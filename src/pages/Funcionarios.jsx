@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState } from 'react';
 import { useFuncionario } from '../hooks/useFuncionario';
 import Nav from '../components/Navbar';
@@ -8,6 +9,35 @@ import { toast } from 'react-toastify';
 
 const Funcionarios = () => {
   const { funcionarios, loading, createFuncionario, editFuncionario, deleteFuncionario } = useFuncionario();
+=======
+import { useState, useEffect } from "react";
+import Nav from "../components/Navbar";
+import { Pencil, Trash2 } from "lucide-react";
+
+const Funcionarios = () => {
+  useEffect(() => {
+    document.title = "SGD - Financeiro";
+  });
+
+  const [funcionarios, setFuncionarios] = useState([
+    {
+      nome: "João Silva",
+      cargo: "Dedetizador",
+      departamento: "Operacional",
+      salario: 2500,
+      status: "Ativo",
+      admissao: "15/03/2023",
+    },
+    {
+      nome: "Maria Souza",
+      cargo: "Administrativo",
+      departamento: "RH",
+      salario: 3200,
+      status: "Ativo",
+      admissao: "10/01/2022",
+    },
+  ]);
+>>>>>>> f95ab878a03bc99cdd34ee7ef57a675e55a1a72d
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [funcionarioSelecionado, setFuncionarioSelecionado] = useState(null);

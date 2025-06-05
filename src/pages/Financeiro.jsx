@@ -3,8 +3,13 @@ import CardInfo from "../components/CardInfo";
 import ChartBar from "../components/ChartBar";
 import ChartLine from "../components/ChartLine";
 import RecentServicesTable from "../components/RecentServicesTable";
+import { useEffect } from "react";
 
 export default function Financeiro() {
+  useEffect(() => {
+    document.title = "SGD - Financeiro";
+  });
+
   //Retorna os serviços concluidos e cancelados
   let contagemConcluido = 0;
   let contagemCancelado = 0;

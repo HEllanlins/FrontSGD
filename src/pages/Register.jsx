@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useUsuarioStore } from "../stores/useUsuarioStore";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+  useEffect(() => {
+    document.title = "SGD - Registro";
+  });
+
   const [nome, setNome] = useState("");
   const [cargo, setCargo] = useState("");
   const [email, setEmail] = useState("");

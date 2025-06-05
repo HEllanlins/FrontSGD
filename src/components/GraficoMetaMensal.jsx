@@ -8,7 +8,8 @@ const data = [
   { name: "Restante", value: meta - ganhos },
 ];
 
-const COLORS = ["#4ade80", "#e5e7eb"]; // verde e cinza claro
+const COLORS = ["#4ade80", "#e5e7eb"]; // cores do grafico verde(O que ja foi arrecadado) e cinza claro(O que falta)
+
 // bg-white p-4 rounded-2xl shadow-md
 export default function GraficoMetaMensal() {
   return (
