@@ -8,31 +8,33 @@ import ProductModal from "../components/ProductModal";
 import { toast } from "react-toastify";
 
 const Estoque = () => {
-  // Hook customizado para produtos
   const { produtos, loading, createProduto, editProduto, deleteProduto } = useProduto();
-
-  // Estados locais
   const [isModalOpen, setModalOpen] = useState(false);
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
+  const [busca, setBusca] = useState(""); // ✅ Estado para busca
 
-  // Definir título da página
   useEffect(() => {
     document.title = "SGD - Estoque";
   }, []);
 
-  // Adicionar produto
+  // ✅ Filtro de dados
+  const produtosFiltrados = produtos?.filter(
+    (produto) =>
+      produto.nome.toLowerCase().includes(busca.toLowerCase()) ||
+      produto.categoria.toLowerCase().includes(busca.toLowerCase()) ||
+      produto.status.toLowerCase().includes(busca.toLowerCase())
+  ) || [];
+
   const handleAdd = () => {
     setProdutoSelecionado(null);
     setModalOpen(true);
   };
 
-  // Editar produto
   const handleEdit = (produto) => {
     setProdutoSelecionado(produto);
     setModalOpen(true);
   };
 
-  // Excluir produto
   const handleDelete = async (produto) => {
     if (window.confirm(`Deseja excluir ${produto.nome}?`)) {
       try {
@@ -45,7 +47,6 @@ const Estoque = () => {
     }
   };
 
-  // Salvar produto (criar ou editar)
   const handleSave = async (produtoEditado) => {
     try {
       if (produtoSelecionado && produtoSelecionado.id) {
@@ -63,13 +64,11 @@ const Estoque = () => {
     }
   };
 
-  // Fechar modal
   const handleCloseModal = () => {
     setModalOpen(false);
     setProdutoSelecionado(null);
   };
 
-  // Estado de carregamento
   if (loading) {
     return (
       <>
@@ -88,7 +87,8 @@ const Estoque = () => {
         <h1 className="text-2xl font-bold text-blue-800 mb-6">Gerenciamento de Estoque</h1>
 
         <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
-          <SearchBar />
+          {/* ✅ Passando value e onChange para SearchBar */}
+          <SearchBar value={busca} onChange={setBusca} />
           <button 
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
             onClick={handleAdd}
@@ -111,7 +111,7 @@ const Estoque = () => {
             },
             { label: "Última Atualização", key: "ultima_atualizacao" }
           ]}
-          data={produtos}
+          data={produtosFiltrados} // ✅ Usando dados filtrados
           onEdit={handleEdit}
           onDelete={handleDelete}
         />

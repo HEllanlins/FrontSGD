@@ -3,11 +3,7 @@ import Nav from '../components/Navbar';
 import Table from '../components/Table';
 import SearchBar from '../components/SearchBar';
 import { toast } from 'react-toastify';
-// Assumindo que você tem um hook para chamados
-// import { useChamados } from '../hooks/useChamados';
-// import ChamadoModal from '../components/ChamadoModal';
 
-// Componente para o badge de status
 const StatusBadge = ({ status }) => {
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
@@ -32,21 +28,16 @@ const StatusBadge = ({ status }) => {
 };
 
 export default function Chamados() {
-  // Estados locais
   const [isModalOpen, setModalOpen] = useState(false);
   const [chamadoSelecionado, setChamadoSelecionado] = useState(null);
   const [chamados, setChamados] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [busca, setBusca] = useState(""); // ✅ Estado para busca
 
-  // Hook customizado (descomente quando implementar)
-  // const { chamados, loading, createChamado, editChamado, deleteChamado } = useChamados();
-
-  // Configurar título da página
   useEffect(() => {
     document.title = "SGD - Chamados";
   }, []);
 
-  // Dados de exemplo (remova quando implementar o hook)
   useEffect(() => {
     const dadosExemplo = [
       {
@@ -73,21 +64,24 @@ export default function Chamados() {
     setChamados(dadosExemplo);
   }, []);
 
-  // Função para editar chamado
+  // ✅ Filtro de dados
+  const chamadosFiltrados = chamados.filter(
+    (chamado) =>
+      chamado.cliente_nome.toLowerCase().includes(busca.toLowerCase()) ||
+      chamado.categoria_nome.toLowerCase().includes(busca.toLowerCase()) ||
+      chamado.descricao.toLowerCase().includes(busca.toLowerCase()) ||
+      chamado.status.toLowerCase().includes(busca.toLowerCase())
+  );
+
   const handleEdit = (chamado) => {
     setChamadoSelecionado(chamado);
     setModalOpen(true);
   };
 
-  // Função para deletar chamado
   const handleDelete = async (chamado) => {
     if (window.confirm(`Deseja excluir o chamado de ${chamado.cliente_nome}?`)) {
       try {
-        // await deleteChamado(chamado.id);
-        
-        // Simulação da exclusão (remova quando implementar o hook)
         setChamados(prev => prev.filter(c => c.id !== chamado.id));
-        
         toast.success('Chamado excluído com sucesso');
       } catch (error) {
         console.error('Erro ao excluir chamado:', error);
@@ -96,36 +90,26 @@ export default function Chamados() {
     }
   };
 
-  // Função para adicionar novo chamado
   const handleAdd = () => {
     setChamadoSelecionado(null);
     setModalOpen(true);
   };
 
-  // Função para salvar chamado (criar ou editar)
   const handleSave = async (chamadoData) => {
     try {
       if (chamadoSelecionado && chamadoSelecionado.id) {
-        // await editChamado(chamadoSelecionado.id, chamadoData);
-        
-        // Simulação da edição (remova quando implementar o hook)
         setChamados(prev => prev.map(c => 
           c.id === chamadoSelecionado.id ? { ...c, ...chamadoData } : c
         ));
-        
         toast.success('Chamado editado com sucesso');
       } else {
-        // await createChamado(chamadoData);
-        
-        // Simulação da criação (remova quando implementar o hook)
         const novoChamado = {
           ...chamadoData,
-          id: Date.now(), // ID temporário
+          id: Date.now(),
           status: 'Aberto',
           data_criacao: new Date().toISOString().split('T')[0]
         };
         setChamados(prev => [...prev, novoChamado]);
-        
         toast.success('Chamado criado com sucesso');
       }
       setModalOpen(false);
@@ -136,13 +120,11 @@ export default function Chamados() {
     }
   };
 
-  // Função para fechar modal
   const handleCloseModal = () => {
     setModalOpen(false);
     setChamadoSelecionado(null);
   };
 
-  // Loading state
   if (loading) {
     return (
       <>
@@ -163,7 +145,8 @@ export default function Chamados() {
         </h1>
         
         <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
-          <SearchBar />
+          {/* ✅ Passando value e onChange para SearchBar */}
+          <SearchBar value={busca} onChange={setBusca} />
           <button 
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
             onClick={handleAdd}
@@ -187,13 +170,13 @@ export default function Chamados() {
             },
             { label: 'Data', key: 'data_criacao' }
           ]}
-          data={chamados || []}
+          data={chamadosFiltrados} // ✅ Usando dados filtrados
           onEdit={handleEdit}
           onDelete={handleDelete}
         />
       </div>
 
-      {/* Modal simples (substitua pelo ChamadoModal quando implementar) */}
+      {/* Modal permanece igual */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
