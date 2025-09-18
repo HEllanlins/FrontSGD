@@ -25,7 +25,6 @@ export default function AppRoutes() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/chamados"
         element={
