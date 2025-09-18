@@ -21,6 +21,15 @@ export default function Home() {
         <div className="h-1/2 w-full grid grid-cols-2 gap-4 p-4">
           <ReposicaoEstoque />
           <TodoList />
+          // From: src/routes/index.jsx
+<Route
+    path="/"
+    element={
+      <PrivateRoute>
+        <Home />
+      </PrivateRoute>
+    }
+/>
         </div>
       </div>
     </>

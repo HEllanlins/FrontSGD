@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { UserIcon, Home, Settings, Users, Wrench, Warehouse, DollarSign, ChevronDown } from 'lucide-react';
+import { UserIcon, Home, Settings, Users, Wrench, Warehouse, DollarSign, ChevronDown, Calendar } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useUsuario } from '../hooks/useUsuario';
 
@@ -41,6 +41,9 @@ function Navbar() {
       <div className="flex gap-6 items-center text-white font-medium">
         <a href="/" className="flex items-center gap-1 hover:text-gray-200">
           <Home size={18} /> Home
+        </a>
+        <a href="/agenda" className="flex items-center gap-1 hover:text-gray-200">
+          <Calendar size={18} /> Agenda
         </a>
         <a href="/chamados" className="flex items-center gap-1 hover:text-gray-200">
           <Settings size={18} /> Chamados
