@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useUsuario } from "../hooks/useUsuario";
 
 export default function Login() {
@@ -67,9 +68,9 @@ export default function Login() {
             </a>
             <span>
               Ainda não tem conta?
-              <a href="/register" className="text-blue-600 text-sm hover:underline">
+              <Link to="/register" className="text-blue-600 text-sm hover:underline">
                 Clique aqui
-              </a>
+              </Link>
             </span>
           </form>
         </div>
