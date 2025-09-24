@@ -3,13 +3,16 @@ import { UsuarioProvider } from "./UsuarioProvider";
 import { ProdutoProvider } from "./ProdutoProvider";
 import { ServiceProvider } from "./ServiceProvider";
 import { VeiculoProvider } from "./VeiculoProvider";
+import { AgendaProvider } from "../contexts/AgendaContext";
 
 export function Providers({ children }) {
   return (
     <UsuarioProvider>
       <ProdutoProvider>
         <ServiceProvider>
-          <VeiculoProvider>{children}</VeiculoProvider>
+          <VeiculoProvider>
+            <AgendaProvider>{children}</AgendaProvider>
+          </VeiculoProvider>
         </ServiceProvider>
       </ProdutoProvider>
     </UsuarioProvider>

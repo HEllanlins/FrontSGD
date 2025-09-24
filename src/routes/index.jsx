@@ -10,7 +10,6 @@ import Veiculos from "../pages/Veiculos";
 import Funcionarios from "../pages/Funcionarios";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import Agenda from "../pages/Agenda";
 import { PrivateRoute } from "./PrivateRoute";
 
 export default function AppRoutes() {
@@ -26,6 +25,7 @@ export default function AppRoutes() {
           </PrivateRoute>
         }
       />
+
       <Route
         path="/chamados"
         element={
@@ -71,14 +71,6 @@ export default function AppRoutes() {
         element={
           <PrivateRoute>
             <Funcionarios />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/agenda"
-        element={
-          <PrivateRoute>
-            <Agenda />
           </PrivateRoute>
         }
       />
